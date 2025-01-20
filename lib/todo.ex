@@ -8,21 +8,55 @@ defmodule Todo do
 	def start(_type, _args) do
 		users = get_all_users()
 
-		input = IO.gets("Hello, what would you like to do?\n(Valid answers: add item, remove item, get all lists): ") |> String.trim() |> String.downcase()
+		input = IO.gets("Hello, what would you like to do?\n(select user, get all lists): ") |> String.trim() |> String.downcase()
 		case input do
-			"add item" ->
-				# Simulate user adding item to their list
-				add_item(Enum.at(users, 0))
+			"select user" ->
+				selected_user_name = IO.gets("Please select a user by name: ") |> String.trim() |> String.downcase()
 
-			"remove item" ->
-				# Simulate user removing item from their list
-				remove_item(Enum.at(users, 1))
+				if selected_user_name != ""  do
+					try do
+						# Search for the user tuple where the first element matches the provided name
+						selected_user = Enum.find(users, fn {name, _, _} -> name == selected_user_name end)
+
+						input = IO.gets("#{elem(selected_user, 0)}, what would you like to do?\n(add item, remove item, get list): ") |> String.trim() |> String.downcase()
+						case input do
+							"add item" ->
+								# Simulate user adding item to their list
+								# selected_user = Enum.at(users, 0)
+								updated_items = add_item(selected_user)
+								{ name, list_name, _items } = selected_user
+								# Update users list in get function
+								get_user_list(name, list_name, updated_items)
+
+							"remove item" ->
+								# Simulate user removing item from their list
+								# selected_user = Enum.at(users, 1)
+								updated_items = remove_item(selected_user)
+								{ name, list_name, _items } = selected_user
+								# Update users list in get function
+								get_user_list(name, list_name, updated_items)
+
+							"get list" ->
+								{name, list_name, items} = selected_user
+								get_user_list(name, list_name, items)
+
+							_ ->
+								IO.puts(:stderr, "Error: Invalid answer provided.")
+						end
+					catch # if selected_user was not found
+						:error, _ ->
+							IO.puts(:stderr, "Error: Provided name does not exist.")
+					end
+
+				else
+					IO.puts(:stderr, "Error: A name is required.")
+				end
 
 			"get all lists" ->
 				# Iterate over enumerable users list and set values of tuple to name, list, and list.
 				Enum.each(users, fn
 					{name, list_name, items} ->
-						get_all_user_lists(name, list_name, items)
+						get_user_list(name, list_name, items)
 					# Catch edge cases
 					_ ->
 						IO.puts("invalid user structure encountered")
@@ -35,7 +69,7 @@ defmodule Todo do
 		Supervisor.start_link([], strategy: :one_for_one)
 	end
 
-	def get_all_users do
+	def get_all_users() do
 		lists = %{
 			chores: :chores,
 			groceries: :groceries,
@@ -44,9 +78,9 @@ defmodule Todo do
 
 		# Create users list with user tuples
 		users = [
-			{"Zach", lists.chores, ["laundry"]},
-			{"Erika", lists.groceries, ["milk", "eggs"]},
-			{"Invalid user", []}
+			{"zach", lists.chores, ["laundry"]},
+			{"erika", lists.groceries, ["milk", "eggs"]},
+			{"invalid user", []}
 		]
 
 		newUser = %UserStruct{name: "Uhtred", list_name: lists.packing, items: []}
@@ -55,7 +89,7 @@ defmodule Todo do
 	end
 
 	# Get user list
-	def get_all_user_lists(name, list_name, items) do
+	def get_user_list(name, list_name, items) do
 		# The application can suggest commonly added items from this map based on the list
 		suggestions = %{
 			chores: "sweep",
@@ -63,7 +97,15 @@ defmodule Todo do
 			packing: "socks",
 		}
 
-		IO.puts("#{name} has #{if Enum.empty?(items), do: "an empty list", else: "a #{list_name} list containing the following items: #{Enum.join(items, ", ")}"}. Would you like to add #{suggestions[list_name]} to your list?")
+		IO.puts("#{name} has #{if Enum.empty?(items), do: "an empty list", else: "a #{list_name} list containing the following items: #{Enum.join(items, ", ")}"}.")
+		# input = IO.gets("Would you like to add #{suggestions[list_name]} to your list? ") |> String.trim() |> String.downcase()
+		# case input do
+		#   "yes" or "y" ->
+
+		#   "no" or "n" ->
+
+		#   _ ->
+		# end
 	end
 
 	# User adds another chore to list
@@ -80,6 +122,7 @@ defmodule Todo do
 				IO.puts("...Success! Adding #{input} to your #{list_name} list")
 				updated_items = items ++ [input]
 				IO.puts("#{name}, here is your updated #{list_name} list: #{Enum.join(updated_items, ", ")}")
+				updated_items
 			end
 		else
 			IO.puts(:stderr, "Error: Input not provided.")
@@ -101,6 +144,7 @@ defmodule Todo do
 			if remove_item do
 				updated_items = List.delete(items, remove_item)
 				IO.puts("...Success! #{name}, here is your updated list:\n(#{updated_items})")
+				updated_items
 			else
 				IO.puts(:stderr, "Error: Unable to remove #{input} because it doesn't exist in your #{list_name} list.")
 			end

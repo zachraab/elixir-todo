@@ -6,9 +6,37 @@ defmodule Todo do
 	use Application
 
 	def start(_type, _args) do
-		# Todo.addItem()
-		# Todo.getList()
+		users = getAllUsers()
 
+		# Switch to turn off functionality during development
+		activeDev = true
+		if activeDev do
+			input = IO.gets("Hello, what would you like to do? (Valid answers: add item, get all lists): ") |> String.trim() |> String.downcase()
+
+			case input do
+				"get all lists" ->
+					# Iterate over enumerable users list and set values of tuple to name, list, and list.
+					Enum.each(users, fn
+						{name, list, items} ->
+							getAllUserLists(name, list, items)
+						# Catch edge cases
+						_ ->
+							IO.puts("invalid user structure encountered")
+					end)
+
+				"add item" ->
+					# Simulate user adding item to their list
+					addItem(Enum.at(users, 0))
+
+				_ ->
+					IO.puts(:stderr, "Error: Invalid answer provided.")
+			end
+		end
+
+		Supervisor.start_link([], strategy: :one_for_one)
+	end
+
+	def getAllUsers do
 		lists = %{
 			chores: :chores,
 			groceries: :groceries,
@@ -23,25 +51,8 @@ defmodule Todo do
 		]
 
 		newUser = %UserStruct{name: "Uhtred", list: lists.packing, items: []}
-		users = users ++ [{newUser.name, newUser.list, newUser.items}]
 
-		# Switch to turn off functionality during development
-		activeDev = false
-		if activeDev do
-			# Iterate over enumerable users list and set values of tuple to name, list, and list.
-			Enum.each(users, fn
-				{name, list, items} ->
-					getAllUserLists(name, list, items)
-				# Catch edge cases
-				_ ->
-					IO.puts("invalid user structure encountered")
-			end)
-		end
-
-		# Simulate user adding item to their list
-		addItem(Enum.at(users, 0))
-
-		Supervisor.start_link([], strategy: :one_for_one)
+		users ++ [{newUser.name, newUser.list, newUser.items}]
 	end
 
 	# Get user list
@@ -61,13 +72,13 @@ defmodule Todo do
 		{ name, list, items } = user
 
 		IO.puts("Hello #{name}, please provide an item that you would like to add to your #{list} list:")
-		input = IO.gets("New item:") |> String.trim()
+		input = IO.gets("New item: ") |> String.trim()
 		if input != ""  do
-			IO.puts("...Success! Adding #{input} to #{list} list")
+			IO.puts("...Success! Adding #{input} to your #{list} list")
 			updatedList = items ++ [input]
 			IO.puts("#{name}, here is your updated #{list} list: #{Enum.join(updatedList, ", ")}")
 		else
-			IO.puts("Error: Input not provided")
+			IO.puts(:stderr, "Error: Input not provided.")
 		end
 	end
 

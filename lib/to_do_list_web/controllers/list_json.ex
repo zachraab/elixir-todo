@@ -19,7 +19,8 @@ defmodule ToDoListWeb.ListJSON do
     %{
       id: list.id,
       list_name: list.list_name,
-      items: list.items
+      items: list.items,
+      user_id: list.user_id
     }
   end
 end

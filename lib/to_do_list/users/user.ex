@@ -5,7 +5,7 @@ defmodule ToDoList.Users.User do
   schema "users" do
     field :name, :string
     field :email, :string
-
+    has_many :lists, ToDoList.Lists.List
     timestamps(type: :utc_datetime)
   end
 

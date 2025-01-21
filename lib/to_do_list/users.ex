@@ -18,7 +18,7 @@ defmodule ToDoList.Users do
 
   """
   def list_users do
-    Repo.all(User)
+    Repo.all(User) |> Repo.preload(:lists)
   end
 
   @doc """
@@ -35,7 +35,7 @@ defmodule ToDoList.Users do
       ** (Ecto.NoResultsError)
 
   """
-  def get_user!(id), do: Repo.get!(User, id)
+  def get_user!(id), do: Repo.get!(User, id) |> Repo.preload(:lists)
 
   @doc """
   Creates a user.

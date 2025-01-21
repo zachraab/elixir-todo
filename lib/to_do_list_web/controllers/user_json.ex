@@ -1,5 +1,6 @@
 defmodule ToDoListWeb.UserJSON do
   alias ToDoList.Users.User
+  alias ToDoList.Lists.List
 
   @doc """
   Renders a list of users.
@@ -19,7 +20,16 @@ defmodule ToDoListWeb.UserJSON do
     %{
       id: user.id,
       name: user.name,
-      email: user.email
+      email: user.email,
+      lists: for(list <- user.lists, do: list_data(list))
+    }
+  end
+
+  defp list_data(%List{} = list) do
+    %{
+      id: list.id,
+      list_name: list.list_name,
+      lists: list.items
     }
   end
 end

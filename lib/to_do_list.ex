@@ -2,7 +2,7 @@ defmodule UserStruct do
 	defstruct [:name, :list_name, :items]
 end
 
-defmodule Todo do
+defmodule ToDoList do
 	use Application
 
 	def start(_type, _args) do

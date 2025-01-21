@@ -1,9 +1,9 @@
-defmodule Todo.MixProject do
+defmodule ToDoList.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :todo,
+      app: :to_do_list,
       version: "0.1.0",
       elixir: "~> 1.18",
       start_permanent: Mix.env() == :prod,
@@ -14,7 +14,7 @@ defmodule Todo.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      mod: {Todo, []},
+      mod: {ToDoList, []},
       extra_applications: [:logger]
     ]
   end

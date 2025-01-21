@@ -91,11 +91,11 @@ defmodule Todo do
 	# Get user list
 	def get_user_list(name, list_name, items) do
 		# The application can suggest commonly added items from this map based on the list
-		suggestions = %{
-			chores: "sweep",
-			groceries: "coffee",
-			packing: "socks",
-		}
+		# suggestions = %{
+		# 	chores: "sweep",
+		# 	groceries: "coffee",
+		# 	packing: "socks",
+		# }
 
 		IO.puts("#{name} has #{if Enum.empty?(items), do: "an empty list", else: "a #{list_name} list containing the following items: #{Enum.join(items, ", ")}"}.")
 		# input = IO.gets("Would you like to add #{suggestions[list_name]} to your list? ") |> String.trim() |> String.downcase()

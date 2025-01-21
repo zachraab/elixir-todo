@@ -3,7 +3,7 @@ import Config
 # Configure your database
 config :to_do_list, ToDoList.Repo,
   username: "postgres",
-  password: "postgres",
+  password: "root",
   hostname: "localhost",
   database: "to_do_list_dev",
   stacktrace: true,

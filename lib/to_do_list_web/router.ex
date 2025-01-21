@@ -18,7 +18,17 @@ defmodule ToDoListWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+    get "/users", PageController, :users
+    get "/lists", PageController, :lists
   end
+
+  scope "/api", ToDoListWeb do
+    pipe_through :api
+
+    resources "/lists", ListController, except: [:new, :edit]
+    resources "/users", UserController, except: [:new, :edit]
+  end
+
 
   # Other scopes may use custom stacks.
   # scope "/api", ToDoListWeb do

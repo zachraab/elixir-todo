@@ -18,7 +18,7 @@ defmodule ToDoListWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
-    get "/users", PageController, :users
+    get "/users", UserController, :index
     get "/lists", PageController, :lists
   end
 

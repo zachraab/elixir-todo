@@ -1,0 +1,9 @@
+<h1 class="text-3xl font-bold">All stored lists in database:</h1>
+
+<ul>
+  <%= for list <- @lists do %>
+    <li class="list-disc"><%= list.list_name %> - <%= Enum.join(list.items, ", " ) %></li>
+  <% end %>
+</ul>
+
+<a href="/api/lists" class="block p-3 mt-3 w-fit bg-green-300 hover:bg-green-500">Lists API</a>

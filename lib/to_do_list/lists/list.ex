@@ -5,7 +5,7 @@ defmodule ToDoList.Lists.List do
   schema "lists" do
     field :items, {:array, :string}
     field :list_name, :string
-    belongs_to :user, ToDo.Users.User
+    belongs_to :user, ToDoList.Users.User
     timestamps(type: :utc_datetime)
   end
 

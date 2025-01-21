@@ -1,0 +1,9 @@
+<h1 class="text-3xl font-bold">All stored users in database:</h1>
+
+<ul>
+  <%= for user <- @users do %>
+    <li class="list-disc"><%= user.name %> - <%= user.email %></li>
+  <% end %>
+</ul>
+
+<a href="/api/users" class="block p-3 mt-3 w-fit bg-green-300 hover:bg-green-500">Users API</a>

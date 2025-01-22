@@ -3,6 +3,7 @@ defmodule ToDoListWeb.UserController do
 
   alias ToDoList.Users
   alias ToDoList.Users.User
+  alias ToDoList.Repo
 
   action_fallback ToDoListWeb.FallbackController
 
@@ -13,6 +14,8 @@ defmodule ToDoListWeb.UserController do
 
   def create(conn, %{"user" => user_params}) do
     with {:ok, %User{} = user} <- Users.create_user(user_params) do
+      user = Users.get_user!(user.id) |> Repo.preload(:lists)
+
       conn
       |> put_status(:created)
       |> put_resp_header("location", ~p"/api/users/#{user}")
@@ -21,12 +24,12 @@ defmodule ToDoListWeb.UserController do
   end
 
   def show(conn, %{"id" => id}) do
-    user = Users.get_user!(id)
+    user = Users.get_user!(id) |> Repo.preload(:lists)
     render(conn, :show, user: user)
   end
 
   def update(conn, %{"id" => id, "user" => user_params}) do
-    user = Users.get_user!(id)
+    user = Users.get_user!(id) |> Repo.preload(:lists)
 
     with {:ok, %User{} = user} <- Users.update_user(user, user_params) do
       render(conn, :show, user: user)

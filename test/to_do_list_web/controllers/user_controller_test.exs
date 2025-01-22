@@ -32,12 +32,14 @@ defmodule ToDoListWeb.UserControllerTest do
       assert %{"id" => id} = json_response(conn, 201)["data"]
 
       conn = get(conn, ~p"/api/users/#{id}")
+      user = json_response(conn, 200)["data"]
 
       assert %{
                "id" => ^id,
                "email" => "some email",
                "name" => "some name"
-             } = json_response(conn, 200)["data"]
+             } = user
+             assert is_list(user["lists"])
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
@@ -54,12 +56,14 @@ defmodule ToDoListWeb.UserControllerTest do
       assert %{"id" => ^id} = json_response(conn, 200)["data"]
 
       conn = get(conn, ~p"/api/users/#{id}")
+      user = json_response(conn, 200)["data"]
 
       assert %{
                "id" => ^id,
                "email" => "some updated email",
                "name" => "some updated name"
-             } = json_response(conn, 200)["data"]
+             } = user
+             assert is_list(user["lists"])
     end
 
     test "renders errors when data is invalid", %{conn: conn, user: user} do

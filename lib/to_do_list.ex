@@ -106,6 +106,7 @@ defmodule ToDoList do
 
 		#   _ ->
 		# end
+    items
 	end
 
 	# User adds another chore to list

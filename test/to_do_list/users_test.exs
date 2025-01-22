@@ -11,12 +11,12 @@ defmodule ToDoList.UsersTest do
     @invalid_attrs %{name: nil, email: nil}
 
     test "list_users/0 returns all users" do
-      user = user_fixture()
+      user = user_fixture() |> Repo.preload(:lists)
       assert Users.list_users() == [user]
     end
 
     test "get_user!/1 returns the user with given id" do
-      user = user_fixture()
+      user = user_fixture() |> Repo.preload(:lists)
       assert Users.get_user!(user.id) == user
     end
 
@@ -42,7 +42,7 @@ defmodule ToDoList.UsersTest do
     end
 
     test "update_user/2 with invalid data returns error changeset" do
-      user = user_fixture()
+      user = user_fixture() |> Repo.preload(:lists)
       assert {:error, %Ecto.Changeset{}} = Users.update_user(user, @invalid_attrs)
       assert user == Users.get_user!(user.id)
     end

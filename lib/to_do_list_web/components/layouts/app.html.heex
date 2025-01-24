@@ -6,13 +6,8 @@
       </a>
     </div>
     <div class="flex items-center gap-4 font-semibold leading-6 text-zinc-900">
-      <a href="/lists" class="hover:text-zinc-700">
-        Lists
-      </a>
-      <a href="/users" class="hover:text-zinc-700">
-        Users
-      </a>
-	  <%!-- <%= link "Users", to: "/users", class: active_class(@conn, "/users") %> --%>
+	  <.link href={~p"/lists"} class={active_class(@conn, "/lists")}>Lists</.link>
+	  <.link href={~p"/users"} class={active_class(@conn, "/users")}>Users</.link>
       <a
         href=""
         class="rounded-lg bg-zinc-100 px-2 py-1 hover:bg-zinc-200/80"

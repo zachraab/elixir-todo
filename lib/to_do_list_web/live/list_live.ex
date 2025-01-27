@@ -26,8 +26,4 @@ defmodule ToDoListWeb.ListLive do
     updated_form = to_form(%{socket.assigns.list_item_form.params | "added_item" => ""})
     {:noreply, assign(socket, rendered_list: updated_list, list_item_form: updated_form)}
   end
-
-  def handle_event("validate_item", %{"added_item" => _item}, socket) do
-    {:noreply, socket}
-  end
 end

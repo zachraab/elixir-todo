@@ -19,7 +19,7 @@ defmodule ToDoListWeb.Router do
 
     get "/", PageController, :home
     get "/users", UserController, :index
-    get "/lists", PageController, :lists
+    live "/lists", ListLive, :lists
   end
 
   scope "/api", ToDoListWeb do

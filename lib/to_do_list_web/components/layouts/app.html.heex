@@ -6,10 +6,10 @@
       </a>
     </div>
     <div class="flex items-center gap-4 font-semibold leading-6 text-zinc-900">
-	  <.link href={~p"/lists"} class={active_class(@conn, "/lists")}>Lists</.link>
-	  <.link href={~p"/users"} class={active_class(@conn, "/users")}>Users</.link>
+	  <%!-- <.link href={~p"/lists"} class={active_class(@conn, "/lists")}>Lists</.link>
+	  <.link href={~p"/users"} class={active_class(@conn, "/users")}>Users</.link> --%>
       <a
-        href=""
+        href="/lists"
         class="rounded-lg bg-zinc-100 px-2 py-1 hover:bg-zinc-200/80"
       >
         Make a new list! <span aria-hidden="true">&rarr;</span>

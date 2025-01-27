@@ -9,7 +9,7 @@ defmodule ToDoListWeb.Layouts do
   `use ToDoListWeb, :live_view`.
   """
   use ToDoListWeb, :html
-  import ToDoListWeb.Helpers
+  # import ToDoListWeb.Helpers
 
   embed_templates "layouts/*"
 end

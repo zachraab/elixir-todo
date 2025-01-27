@@ -1,0 +1,33 @@
+<%!-- Below are all the lists!
+<ul>
+	<%= for list <- @lists do %>
+	<li class="list-disc"><%= list.list_name %> - <%= Enum.join(list.items, ", " ) %></li>
+	<% end %>
+</ul> --%>
+
+<div class="flex border-2 border-black rounded-lg p-10 mt-10">
+	<div class="w-1/2 border-r-2 pr-10">
+		<h2 class="underline">Create a new list using the form:</h2>
+		<.simple_form for={@list_name_form} phx-submit="set_list_name">
+			<.input field={@list_name_form[:new_list_name]} value={@list_name_form.params["new_list_name"]} label="List Name"/>
+			<.button>Set List Name</.button>
+		</.simple_form>
+		<.simple_form for={@list_item_form} phx-submit="add_item" phx-change="validate_item">
+			<.input field={@list_item_form[:added_item]} label="Items" placeholder={@list_item_form.params["placeholder_value"]}/>
+			<.button>Add Item</.button>
+		</.simple_form>
+	</div>
+
+	<div class="ml-10 w-1/2">
+		<h2 class="underline">Your new list:</h2>
+		<%= if @new_list_name != "" do %>
+			<strong class="block mt-10 text-2xl"><%= @new_list_name %></strong>
+			<hr/>
+		<% end %>
+		<ol class="grid grid-cols-2 gap-4 pt-5">
+		<%= for item <- @rendered_list do %>
+			<li class="list-decimal"><%= item %></li>
+		<% end %>
+		</ol>
+	</div>
+</div>

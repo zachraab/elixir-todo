@@ -49,7 +49,7 @@ defmodule ToDoListWeb.ListLive do
 
   # Write list to database
   def handle_event("create_list", _params, socket) do
-    case Lists.create_list(%{list_name: socket.assigns.new_list_name, items: socket.assigns.new_list_items, user_id: 1}) do
+    case Lists.create_list(%{list_name: socket.assigns.new_list_name, items: socket.assigns.new_list_items}) do
       {:ok, _list} ->
         {:noreply,
          socket

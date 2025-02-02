@@ -8,12 +8,12 @@
 <div class="flex border-2 border-black rounded-lg p-10 mt-10">
 	<div class="w-1/2 border-r-2 pr-10">
 		<h2 class="underline">Create a new list using the form:</h2>
-		<.simple_form for={@list_name_form} phx-submit="set_list_name">
-			<.input field={@list_name_form[:new_list_name]} value={@list_name_form.params["new_list_name"]} label="List Name"/>
+		<.simple_form for={@list_name_form} phx-submit="set_list_name" phx-change="update_list_name">
+			<.input field={@list_name_form[:new_list_name]} value={@list_name_form.params["new_list_name"]} label="List Name" placeholder="Enter list name..."/>
 			<.button>Set List Name</.button>
 		</.simple_form>
-		<.simple_form for={@list_item_form} phx-submit="add_item">
-			<.input field={@list_item_form[:added_item]} label="Items" placeholder={@list_item_form.params["placeholder_value"]}/>
+		<.simple_form for={@list_item_form} phx-submit="add_item" phx-change="update_item">
+			<.input field={@list_item_form[:added_item]} value={@list_item_form.params["added_item"]} label="Items" placeholder="Add new item..."/>
 			<.button>Add Item</.button>
 		</.simple_form>
 	</div>
@@ -25,9 +25,14 @@
 			<hr/>
 		<% end %>
 		<ol class="grid grid-cols-2 gap-4 pt-5">
-		<%= for item <- @rendered_list do %>
+		<%= for item <- @new_list_items do %>
 			<li class="list-decimal"><%= item %></li>
 		<% end %>
 		</ol>
+		<%= if @new_list_name != "" && @new_list_items != [] do %>
+			<.button phx-click="create_list" class="mt-5">Save List</.button>
+		<% end %>
 	</div>
 </div>
+
+<.link href={~p"/lists"} class="hover:underline mt-10 block">View All Lists</.link>

@@ -14,6 +14,8 @@ defmodule ToDoList.Users.User do
     user
     |> cast(attrs, [:name, :email])
     |> validate_required([:name, :email])
+    |> validate_format(:email, ~r/^[^\s]+@[^\s]+$/, message: "must be a valid email")
+    |> validate_length(:email, max: 160)
     |> unique_constraint(:email)
   end
 end

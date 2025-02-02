@@ -5,25 +5,61 @@ defmodule ToDoListWeb.ListLive do
 
   def mount(_params, _session, socket) do
     list_name_form = to_form(%{"new_list_name" => ""})
-    list_item_form = to_form(%{"added_item" => "", "placeholder_value" => "Type here..."})
+    list_item_form = to_form(%{"added_item" => ""})
     lists = Lists.list_lists()
     {:ok, assign(socket,
       new_list_name: "",
-      rendered_list: [],
+      new_list_items: [],
       list_name_form: list_name_form,
       list_item_form: list_item_form,
       lists: lists)
     }
   end
 
+  # Handle List Name
   def handle_event("set_list_name", %{"new_list_name" => list_name}, socket) do
-    updated_form = to_form(%{"new_list_name" => list_name})
-    {:noreply, assign(socket, new_list_name: list_name, list_name_form: updated_form)}
+    if String.trim(list_name) != "" do
+      updated_form = to_form(%{"new_list_name" => ""})
+      {:noreply, assign(socket, new_list_name: list_name, list_name_form: updated_form)}
+    else
+      {:noreply, socket |> put_flash(:error, "List name cannot be empty") |> assign(list_name_form: to_form(%{"new_list_name" => ""}))}
+    end
   end
 
+  def handle_event("update_list_name", %{"new_list_name" => name}, socket) do
+    updated_form = to_form(%{"new_list_name" => name})
+    {:noreply, assign(socket, list_name_form: updated_form)}
+  end
+
+  # Handle List Items
   def handle_event("add_item", %{"added_item" => item}, socket) do
-    updated_list = socket.assigns.rendered_list ++ [item]
-    updated_form = to_form(%{socket.assigns.list_item_form.params | "added_item" => ""})
-    {:noreply, assign(socket, rendered_list: updated_list, list_item_form: updated_form)}
+    if String.trim(item) != "" do
+      updated_list = socket.assigns.new_list_items ++ [item]
+      updated_form = to_form(%{"added_item" => ""})
+      {:noreply, assign(socket, new_list_items: updated_list, list_item_form: updated_form)}
+    else
+      {:noreply, socket |> put_flash(:error, "Item cannot be empty") |> assign(list_item_form: to_form(%{"added_item" => ""}))}
+    end
+  end
+
+  def handle_event("update_item", %{"added_item" => item}, socket) do
+    updated_form = to_form(%{"added_item" => item, "placeholder_value" => socket.assigns.list_item_form.params["placeholder_value"]})
+    {:noreply, assign(socket, list_item_form: updated_form)}
+  end
+
+  # Write list to database
+  def handle_event("create_list", _params, socket) do
+    case Lists.create_list(%{list_name: socket.assigns.new_list_name, items: socket.assigns.new_list_items, user_id: 1}) do
+      {:ok, _list} ->
+        {:noreply,
+         socket
+         |> put_flash(:info, "List saved successfully!")
+         |> assign(new_list_name: "",
+                   new_list_items: [],
+                   list_name_form: to_form(%{"new_list_name" => ""}),
+                   list_item_form: to_form(%{"added_item" => ""}))}
+      {:error, _changeset} ->
+        {:noreply, put_flash(socket, :error, "Failed to create list")}
+    end
   end
 end

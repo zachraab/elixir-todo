@@ -1,4 +1,4 @@
-# ToDoList
+# To-Do List
 
 ## Description
 Developed a web application that allows users to create and manage personalized lists by adding items. 

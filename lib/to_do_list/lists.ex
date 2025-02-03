@@ -85,7 +85,8 @@ defmodule ToDoList.Lists do
       {:error, %Ecto.Changeset{}}
 
   """
-  def delete_list(%List{} = list) do
+  def delete_list(list_id) when is_integer(list_id) do
+    list = get_list!(list_id)
     Repo.delete(list)
   end
 

@@ -51,15 +51,30 @@ defmodule ToDoListWeb.ListLive do
   def handle_event("create_list", _params, socket) do
     case Lists.create_list(%{list_name: socket.assigns.new_list_name, items: socket.assigns.new_list_items}) do
       {:ok, _list} ->
+        updated_lists = Lists.list_lists()
         {:noreply,
          socket
          |> put_flash(:info, "List saved successfully!")
          |> assign(new_list_name: "",
                    new_list_items: [],
                    list_name_form: to_form(%{"new_list_name" => ""}),
-                   list_item_form: to_form(%{"added_item" => ""}))}
+                   list_item_form: to_form(%{"added_item" => ""}),
+                   lists: updated_lists
+                  )
+        }
       {:error, _changeset} ->
         {:noreply, put_flash(socket, :error, "Failed to create list")}
+    end
+  end
+
+  # Delete list from database
+  def handle_event("delete_list", %{"id" => id}, socket) do
+    list_id = String.to_integer(id)
+    case Lists.delete_list(list_id) do
+      {:ok, list} ->
+        updated_lists = Lists.list_lists()
+        {:noreply, socket |> put_flash(:info, "List Name:#{list.list_name} where ID:#{list.id} was successefully deleted") |> assign(lists: updated_lists)}
+      {:error, _changeset} -> {:noreply, socket |> put_flash(:error, "Failed to delete list")}
     end
   end
 end

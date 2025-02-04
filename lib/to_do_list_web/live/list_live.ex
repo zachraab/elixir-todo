@@ -73,7 +73,7 @@ defmodule ToDoListWeb.ListLive do
     case Lists.delete_list(list_id) do
       {:ok, list} ->
         updated_lists = Lists.list_lists()
-        {:noreply, socket |> put_flash(:info, "List Name:#{list.list_name} where ID:#{list.id} was successefully deleted") |> assign(lists: updated_lists)}
+        {:noreply, socket |> put_flash(:info, "List: #{list.list_name} where ID: #{list.id} was successefully deleted") |> assign(lists: updated_lists)}
       {:error, _changeset} -> {:noreply, socket |> put_flash(:error, "Failed to delete list")}
     end
   end

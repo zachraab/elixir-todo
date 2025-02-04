@@ -34,7 +34,10 @@
 	<ul>
 	<%= for list <- @lists do %>
 		<div class="flex justify-between items-center p-5">
-			<.link href={~p"/lists/#{list.id}"} class="hover:underline"><li class="list-disc"><strong><%= list.list_name %></strong> - <%= Enum.join(list.items, ", " ) %></li></.link><.button phx-click="delete_list" phx-value-id={list.id} class="bg-red-500 hover:bg-red-600">X</.button>
+			<.link href={~p"/lists/#{list.id}"} class="hover:underline">
+				<li class="list-disc"><strong><%= list.list_name %></strong> - <%= Enum.join(list.items, ", " ) %></li>
+			</.link>
+			<.button phx-click="delete_list" phx-value-id={list.id}>X</.button>
 		</div>
 		<hr />
 	<% end %>

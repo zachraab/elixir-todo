@@ -26,7 +26,7 @@ defmodule ToDoListWeb.ListDetailLive do
 
     case Lists.update_list(list, %{items: updated_items}) do
       {:ok, updated_list} ->
-        {:noreply, assign(socket, list: updated_list)}
+        {:noreply, socket |> put_flash(:info, "List: #{list.list_name} was successfully updated") |> assign(list: updated_list)}
 
       {:error, _changeset} ->
         {:noreply, put_flash(socket, :error, "Failed to save changes to #{list.list_name} list")}

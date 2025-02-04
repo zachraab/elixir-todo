@@ -22,6 +22,7 @@ defmodule ToDoListWeb.Router do
     get "/lists", PageController, :lists
     live "/new-list", ListLive, :lists
     live "/lists/:id", ListDetailLive
+    live "/*path", NotFoundLive
   end
 
   scope "/api", ToDoListWeb do
@@ -30,12 +31,6 @@ defmodule ToDoListWeb.Router do
     resources "/lists", ListController, except: [:new, :edit]
     resources "/users", UserController, except: [:new, :edit]
   end
-
-
-  # Other scopes may use custom stacks.
-  # scope "/api", ToDoListWeb do
-  #   pipe_through :api
-  # end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
   if Application.compile_env(:to_do_list, :dev_routes) do

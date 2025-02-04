@@ -1,10 +1,3 @@
-<%!-- Below are all the lists!
-<ul>
-	<%= for list <- @lists do %>
-	<li class="list-disc"><%= list.list_name %> - <%= Enum.join(list.items, ", " ) %></li>
-	<% end %>
-</ul> --%>
-
 <div class="flex flex-col md:flex-row border-2 border-black rounded-lg p-10 mt-10">
 	<div class="w-full md:w-1/2 md:border-r-2 md:pr-10">
 		<h2 class="underline">Create a new list using the form:</h2>
@@ -13,7 +6,7 @@
 			<.button>Set List Name</.button>
 		</.simple_form>
 		<.simple_form for={@list_item_form} phx-submit="add_item" phx-change="update_item">
-			<.input field={@list_item_form[:added_item]} value={@list_item_form.params["added_item"]} label="Items" placeholder="Add new item..."/>
+			<.input field={@list_item_form[:added_item]} value={@list_item_form.params["added_item"]} label="Item" placeholder="Add new item..."/>
 			<.button>Add Item</.button>
 		</.simple_form>
 	</div>
@@ -35,15 +28,13 @@
 	</div>
 </div>
 
-<%!-- <.link href={~p"/lists"} class="hover:underline mt-10 block">View All Lists</.link> --%>
-
 <div class="mt-10">
 	<h1 class="text-3xl font-bold">All stored lists in database:</h1>
 	<hr/>
 	<ul>
 	<%= for list <- @lists do %>
 		<div class="flex justify-between items-center p-5">
-			<li class="list-disc"><strong><%= list.list_name %></strong> - <%= Enum.join(list.items, ", " ) %></li><.button phx-click="delete_list" phx-value-id={list.id} class="bg-red-500 hover:bg-red-600">X</.button>
+			<.link href={~p"/lists/#{list.id}"} class="hover:underline"><li class="list-disc"><strong><%= list.list_name %></strong> - <%= Enum.join(list.items, ", " ) %></li></.link><.button phx-click="delete_list" phx-value-id={list.id} class="bg-red-500 hover:bg-red-600">X</.button>
 		</div>
 		<hr />
 	<% end %>

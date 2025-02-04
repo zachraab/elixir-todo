@@ -1,0 +1,12 @@
+<h1>Hello and welcome to the detail page for: <strong><%= @list.list_name %></strong> where ID: <%= @list.id %></h1>
+
+<div class="">
+	<strong class="block mt-10 text-2xl"><%= @list.list_name %></strong>
+	<hr/>
+	<.simple_form for={@update_list_form} phx-submit="update_list" phx-change="">
+		<%= for {item, index} <- Enum.with_index(@list.items, 1) do %>
+			<li class="list-decimal"><input value={item}/></li>
+		<% end %>
+	</.simple_form>
+	<.button phx-click="" class="mt-5">Save Changes</.button>
+</div>

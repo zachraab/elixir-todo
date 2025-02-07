@@ -10,3 +10,14 @@ Developed a web application that allows users to create and manage personalized 
   * Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
   * Click on -> _Make a new list!_
   * Use the form to set a list name and add items to your list!
+
+## Features
+
+  * Create/delete to-do lists
+  * Update existing to-do lists
+
+## Future Features
+
+  * Mark item complete
+  * Search bar
+  * User and email authentication

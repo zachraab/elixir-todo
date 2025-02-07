@@ -1,16 +1,21 @@
 <h1 class="text-4xl">Edit and update your list: <strong><%= @list.list_name %></strong></h1>
 
-<div>
-	<strong class="block mt-10 text-2xl"><%= @list.list_name %></strong>
-	<hr/>
-	<.simple_form for={@form} phx-submit="update_list">
-		<ol>
-			<%= for {item, index} <- Enum.with_index(@list.items) do %>
-				<li class="list-decimal">
-					<input type="text" name={"items[#{index}]"} value={item}/>
-				</li>
-			<% end %>
-			<.button class="mt-5">Save Changes</.button>
-		</ol>
-	</.simple_form>
+<div class="flex flex-col md:flex-row mt-10">
+	<div class="w-full md:w-1/2 md:pr-10 md:border-r-2">
+		<strong class="block mt-10 text-2xl"><%= @list.list_name %></strong>
+		<hr/>
+		<.simple_form for={@form} phx-submit="update_list">
+			<ol class="pl-5">
+				<%= for {item, index} <- Enum.with_index(@list.items) do %>
+					<li class="list-decimal">
+						<input type="text" name={"items[#{index}]"} value={item} class="mt-2 w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6 border-zinc-300 focus:border-zinc-400"/>
+					</li>
+				<% end %>
+			<.button class="mt-10">Save Changes</.button>
+			</ol>
+		</.simple_form>
+	</div>
+	<div class="w-full md:w-1/2 md:pl-10">
+		<.live_component module={ListItemFormComponent} id="list-item-form" />
+	</div>
 </div>

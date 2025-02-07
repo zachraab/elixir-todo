@@ -5,10 +5,7 @@
 			<.input field={@list_name_form[:new_list_name]} value={@list_name_form.params["new_list_name"]} label="List Name" placeholder="Enter list name..."/>
 			<.button>Set List Name</.button>
 		</.simple_form>
-		<.simple_form for={@list_item_form} phx-submit="add_item" phx-change="update_item">
-			<.input field={@list_item_form[:added_item]} value={@list_item_form.params["added_item"]} label="Item" placeholder="Add new item..."/>
-			<.button>Add Item</.button>
-		</.simple_form>
+		<.live_component module={ListItemFormComponent} id="list-item-form" new_list_items={@new_list_items}/>
 	</div>
 
 	<div class="w-full mt-10 md:mt-0 md:ml-10 md:w-1/2">

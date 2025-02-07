@@ -2,18 +2,22 @@ defmodule ToDoListWeb.ListLive do
   use ToDoListWeb, :live_view
 
   alias ToDoList.Lists
+  alias ToDoListWeb.ListItemFormComponent
 
   def mount(_params, _session, socket) do
     list_name_form = to_form(%{"new_list_name" => ""})
-    list_item_form = to_form(%{"added_item" => ""})
     lists = Lists.list_lists()
     {:ok, assign(socket,
       new_list_name: "",
       new_list_items: [],
       list_name_form: list_name_form,
-      list_item_form: list_item_form,
       lists: lists)
     }
+  end
+
+  def handle_info({:add_list_item, item}, socket) do
+    updated_list = socket.assigns.new_list_items ++ [item]
+    {:noreply, assign(socket, new_list_items: updated_list)}
   end
 
   # Handle List Name
@@ -29,22 +33,6 @@ defmodule ToDoListWeb.ListLive do
   def handle_event("update_list_name", %{"new_list_name" => name}, socket) do
     updated_form = to_form(%{"new_list_name" => name})
     {:noreply, assign(socket, list_name_form: updated_form)}
-  end
-
-  # Handle List Items
-  def handle_event("add_item", %{"added_item" => item}, socket) do
-    if String.trim(item) != "" do
-      updated_list = socket.assigns.new_list_items ++ [item]
-      updated_form = to_form(%{"added_item" => ""})
-      {:noreply, assign(socket, new_list_items: updated_list, list_item_form: updated_form)}
-    else
-      {:noreply, socket |> put_flash(:error, "Item cannot be empty") |> assign(list_item_form: to_form(%{"added_item" => ""}))}
-    end
-  end
-
-  def handle_event("update_item", %{"added_item" => item}, socket) do
-    updated_form = to_form(%{"added_item" => item, "placeholder_value" => socket.assigns.list_item_form.params["placeholder_value"]})
-    {:noreply, assign(socket, list_item_form: updated_form)}
   end
 
   # Write list to database

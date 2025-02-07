@@ -8,14 +8,17 @@
 			<ol class="pl-5">
 				<%= for {item, index} <- Enum.with_index(@list.items) do %>
 					<li class="list-decimal">
-						<input type="text" name={"items[#{index}]"} value={item} class="mt-2 w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6 border-zinc-300 focus:border-zinc-400"/>
+						<div class="flex">
+							<input type="text" name={"items[#{index}]"} value={item} class="mt-2 w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6 border-zinc-300 focus:border-zinc-400"/>
+							<.button type="button" phx-click="delete_item" phx-value-index={index} class="mt-2 ml-5 h-10">X</.button>
+						</div>
 					</li>
 				<% end %>
 			<.button class="mt-10">Save Changes</.button>
 			</ol>
 		</.simple_form>
 	</div>
-	<div class="w-full md:w-1/2 md:pl-10">
+	<div class="w-full md:w-1/2 pl-5 md:pl-10">
 		<.live_component module={ListItemFormComponent} id="list-item-form" />
 	</div>
 </div>

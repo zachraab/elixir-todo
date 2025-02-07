@@ -17,6 +17,12 @@ defmodule ToDoListWeb.ListDetailLive do
     end
   end
 
+  defp create_map_from_list(items_list) do
+	items_list
+	|> Enum.with_index()
+	|> Enum.into(%{}, fn {item, index} -> {Integer.to_string(index), item} end)
+  end
+
   defp update_list_items(socket, items_map) do
     list = socket.assigns.list
 
@@ -36,10 +42,7 @@ defmodule ToDoListWeb.ListDetailLive do
 
   def handle_info({:add_list_item, item}, socket) do
     current_items = socket.assigns.list.items
-    current_items_map = current_items
-    |> Enum.with_index()
-    |> Enum.map(fn {item, index} -> {to_string(index), item} end)
-    |> Enum.into(%{})
+    current_items_map = create_map_from_list(current_items)
 
     new_index = length(current_items) |> Integer.to_string()
     new_items_map = Map.put(current_items_map, new_index, item)
@@ -48,5 +51,18 @@ defmodule ToDoListWeb.ListDetailLive do
 
   def handle_event("update_list", %{"items" => items_map}, socket) do
     update_list_items(socket, items_map)
+  end
+
+  def handle_event("delete_item", %{"index" => item_index}, socket) do
+	list = socket.assigns.list
+	current_items = socket.assigns.list.items
+
+	remove_item = Enum.at(current_items, String.to_integer(item_index), nil)
+	updated_items = List.delete(current_items, remove_item)
+    updated_items_map = create_map_from_list(updated_items)
+
+	update_list_items(socket, updated_items_map)
+
+	{:noreply, socket |> put_flash(:info, "Successfully deleted item: #{remove_item}") |> assign(list: %{list | items: updated_items})}
   end
 end

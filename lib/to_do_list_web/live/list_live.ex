@@ -6,13 +6,24 @@ defmodule ToDoListWeb.ListLive do
 
   def mount(_params, _session, socket) do
     list_name_form = to_form(%{"new_list_name" => ""})
+    search_form = to_form(%{"search_query" => ""})
     lists = Lists.list_lists()
     {:ok, assign(socket,
       new_list_name: "",
       new_list_items: [],
       list_name_form: list_name_form,
+      search_form: search_form,
+      search_query: "",
       lists: lists)
     }
+  end
+
+  defp filter_lists(lists, nil), do: lists
+  defp filter_lists(lists, ""), do: lists
+  defp filter_lists(lists, query) do
+    Enum.filter(lists, fn list ->
+      String.contains?(String.downcase(list.list_name), String.downcase(query))
+    end)
   end
 
   def handle_info({:add_list_item, item}, socket) do
@@ -70,5 +81,10 @@ defmodule ToDoListWeb.ListLive do
         {:noreply, socket |> put_flash(:info, "List: #{list.list_name} where ID: #{list.id} was successefully deleted") |> assign(lists: updated_lists)}
       {:error, _changeset} -> {:noreply, socket |> put_flash(:error, "Failed to delete list")}
     end
+  end
+
+  def handle_event("search_list", %{"search_query" => search_query}, socket) do
+    trimmed_query = String.trim(search_query)
+    {:noreply, assign(socket, search_query: trimmed_query)}
   end
 end

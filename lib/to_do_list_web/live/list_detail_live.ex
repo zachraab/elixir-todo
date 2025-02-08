@@ -49,6 +49,10 @@ defmodule ToDoListWeb.ListDetailLive do
     update_list_items(socket, new_items_map)
   end
 
+  def handle_info({:show_error, message}, socket) do
+    {:noreply, put_flash(socket, :error, message)}
+  end
+
   def handle_event("update_list", %{"items" => items_map}, socket) do
     update_list_items(socket, items_map)
   end

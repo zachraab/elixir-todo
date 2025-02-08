@@ -22,7 +22,6 @@ defmodule ToDoListWeb.Router do
     get "/lists", PageController, :lists
     live "/new-list", ListLive, :lists
     live "/lists/:id", ListDetailLive
-    live "/*path", NotFoundLive
   end
 
   scope "/api", ToDoListWeb do
@@ -47,5 +46,10 @@ defmodule ToDoListWeb.Router do
       live_dashboard "/dashboard", metrics: ToDoListWeb.Telemetry
       forward "/mailbox", Plug.Swoosh.MailboxPreview
     end
+  end
+
+  scope "/", ToDoListWeb do
+    pipe_through :browser
+    live "/*path", NotFoundLive
   end
 end

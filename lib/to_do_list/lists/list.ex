@@ -14,5 +14,6 @@ defmodule ToDoList.Lists.List do
     list
     |> cast(attrs, [:list_name, :items, :user_id])
     |> validate_required([:list_name, :items])
+    |> validate_length(:items, min: 1, message: "must have at least one item")
   end
 end

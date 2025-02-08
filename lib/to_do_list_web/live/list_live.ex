@@ -20,11 +20,17 @@ defmodule ToDoListWeb.ListLive do
     {:noreply, assign(socket, new_list_items: updated_list)}
   end
 
+  def handle_info({:show_error, message}, socket) do
+    {:noreply, put_flash(socket, :error, message)}
+  end
+
   # Handle List Name
   def handle_event("set_list_name", %{"new_list_name" => list_name}, socket) do
-    if String.trim(list_name) != "" do
+    trimmed_list_name = String.trim(list_name)
+    IO.inspect(trimmed_list_name)
+    if String.length(trimmed_list_name) > 0 do
       updated_form = to_form(%{"new_list_name" => ""})
-      {:noreply, assign(socket, new_list_name: list_name, list_name_form: updated_form)}
+      {:noreply, assign(socket, new_list_name: trimmed_list_name, list_name_form: updated_form)}
     else
       {:noreply, socket |> put_flash(:error, "List name cannot be empty") |> assign(list_name_form: to_form(%{"new_list_name" => ""}))}
     end

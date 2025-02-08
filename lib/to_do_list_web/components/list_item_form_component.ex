@@ -20,12 +20,15 @@ defmodule ToDoListWeb.ListItemFormComponent do
 
   # Handle List Items
   def handle_event("add_item", %{"added_item" => item}, socket) do
-    if String.trim(item) != "" do
-      send(self(), {:add_list_item, item})
+    trimmed_item = String.trim(item)
+    IO.inspect(trimmed_item)
+    if String.length(trimmed_item) > 0 do
+      send(self(), {:add_list_item, trimmed_item})
       updated_form = to_form(%{"added_item" => ""})
       {:noreply, assign(socket, list_item_form: updated_form)}
     else
-      {:noreply, socket |> put_flash(:error, "Item cannot be empty") |> assign(list_item_form: to_form(%{"added_item" => ""}))}
+      send(self(), {:show_error, "Item cannot be empty"})
+      {:noreply, assign(socket, list_item_form: to_form(%{"added_item" => item}))}
     end
   end
 

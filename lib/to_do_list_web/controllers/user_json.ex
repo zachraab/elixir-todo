@@ -1,5 +1,5 @@
 defmodule ToDoListWeb.UserJSON do
-  alias ToDoList.Users.User
+  alias ToDoList.Accounts.User
   alias ToDoList.Lists.List
 
   @doc """
@@ -19,7 +19,6 @@ defmodule ToDoListWeb.UserJSON do
   defp data(%User{} = user) do
     %{
       id: user.id,
-      name: user.name,
       email: user.email,
       lists: for(list <- user.lists, do: list_data(list))
     }

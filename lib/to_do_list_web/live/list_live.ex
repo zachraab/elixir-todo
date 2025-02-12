@@ -1,22 +1,30 @@
 defmodule ToDoListWeb.ListLive do
   use ToDoListWeb, :live_view
-
+  alias ToDoList.Accounts
   alias ToDoList.Lists
   alias ToDoListWeb.ListItemFormComponent
 
-  def mount(_params, _session, socket) do
-    list_name_form = to_form(%{"new_list_name" => ""})
-    search_form = to_form(%{"search_query" => ""})
-    lists = Lists.list_lists()
-    {:ok, assign(socket,
+  def mount(_params, session, socket) do
+    user_token = Map.get(session, "user_token")
+    current_user = user_token && Accounts.get_user_by_session_token(user_token)
+
+    common_assigns = %{
       new_list_name: "",
       new_list_items: [],
-      list_name_form: list_name_form,
-      search_form: search_form,
+      list_name_form: to_form(%{"new_list_name" => ""}),
+      search_form: to_form(%{"search_query" => ""}),
       search_query: "",
-      lists: lists)
+      current_user: current_user
     }
+
+    lists = Lists.list_lists()
+    filtered_lists = socket_filter_lists(lists, current_user)
+
+    {:ok, assign(socket, Map.merge(common_assigns, %{lists: filtered_lists}))}
   end
+
+  defp socket_filter_lists(lists, nil), do: Enum.filter(lists, &is_nil(&1.user_id))
+  defp socket_filter_lists(lists, current_user), do: Enum.filter(lists, &(&1.user_id == nil or &1.user_id == current_user.id))
 
   defp filter_lists(lists, nil), do: lists
   defp filter_lists(lists, ""), do: lists
@@ -53,10 +61,12 @@ defmodule ToDoListWeb.ListLive do
   end
 
   # Write list to database
-  def handle_event("create_list", _params, socket) do
-    case Lists.create_list(%{list_name: socket.assigns.new_list_name, items: socket.assigns.new_list_items}) do
+  def handle_event("create_list", _params, socket) do\
+    current_user = socket.assigns.current_user
+    case Lists.create_list(%{list_name: socket.assigns.new_list_name, items: socket.assigns.new_list_items, user_id: current_user && current_user.id}) do
       {:ok, _list} ->
-        updated_lists = Lists.list_lists()
+        lists = Lists.list_lists()
+        updated_lists = socket_filter_lists(lists, current_user)
         {:noreply,
          socket
          |> put_flash(:info, "List saved successfully!")
@@ -74,10 +84,12 @@ defmodule ToDoListWeb.ListLive do
 
   # Delete list from database
   def handle_event("delete_list", %{"id" => id}, socket) do
+    current_user = socket.assigns.current_user
     list_id = String.to_integer(id)
     case Lists.delete_list(list_id) do
       {:ok, list} ->
-        updated_lists = Lists.list_lists()
+        lists = Lists.list_lists()
+        updated_lists = socket_filter_lists(lists, current_user)
         {:noreply, socket |> put_flash(:info, "List: #{list.list_name} where ID: #{list.id} was successefully deleted") |> assign(lists: updated_lists)}
       {:error, _changeset} -> {:noreply, socket |> put_flash(:error, "Failed to delete list")}
     end

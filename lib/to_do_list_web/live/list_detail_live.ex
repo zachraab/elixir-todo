@@ -1,14 +1,18 @@
 defmodule ToDoListWeb.ListDetailLive do
   use ToDoListWeb, :live_view
 
+  alias ToDoList.Accounts
   alias ToDoList.Lists
   alias ToDoListWeb.ListItemFormComponent
 
-  def mount(%{"id" => id}, _session, socket) do
+  def mount(%{"id" => id}, session, socket) do
+    user_token = Map.get(session, "user_token")
+    current_user = user_token && Accounts.get_user_by_session_token(user_token)
+
     try do
       form = to_form(%{})
       list = Lists.get_list!(id)
-      {:ok, assign(socket, form: form, list: list)}
+      {:ok, assign(socket, form: form, list: list, current_user: current_user)}
     rescue
       Ecto.NoResultsError ->
         {:ok, socket

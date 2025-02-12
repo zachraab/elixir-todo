@@ -15,9 +15,11 @@ Developed a web application that allows users to create and manage personalized 
 
   * Create/delete to-do lists
   * Update existing to-do lists
+  * Search bar
+  * User and email authentication
+  * Lists are private if created with an account
 
 ## Future Features
 
   * Mark item complete
-  * Search bar
-  * User and email authentication
+  * Sharing private lists with other users

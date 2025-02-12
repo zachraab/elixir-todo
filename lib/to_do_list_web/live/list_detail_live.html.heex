@@ -1,4 +1,4 @@
-<%= if @list.user_id == nil || @current_user.id == @list.user_id do %>
+<%= if @list.user_id == nil || (@current_user && @current_user.id == @list.user_id) do %>
 	<h1 class="text-4xl">Edit and update your list: <strong><%= @list.list_name %></strong></h1>
 
 	<div class="flex flex-col md:flex-row mt-10">

@@ -1,0 +1,18 @@
+<div class="mt-10">
+	<.simple_form for={@search_form} phx-change="search_list" class="mb-5">
+		<.input field={@search_form[:search_query]} label="Find a list" placeholder="Search..."/>
+	</.simple_form>
+	<h1 class="text-3xl font-bold">All stored lists in database:</h1>
+	<hr/>
+	<ul>
+	<%= for list <- filter_lists(@lists, @search_query) do %>
+		<div class="flex justify-between items-center p-5">
+			<.link href={~p"/lists/#{list.id}"} class="hover:underline">
+				<li class="list-disc"><strong><%= list.list_name %></strong> - <%= Enum.join(list.items, ", " ) %></li>
+			</.link>
+			<.button phx-click="delete_list" phx-value-id={list.id}>X</.button>
+		</div>
+		<hr />
+	<% end %>
+	</ul>
+</div>

@@ -17,7 +17,7 @@ defmodule ToDoListWeb.ListDetailLive do
       Ecto.NoResultsError ->
         {:ok, socket
         |> put_flash(:error, "List with ID: #{id} does not exist")
-        |> redirect(to: ~p"/new-list")}
+        |> redirect(to: ~p"/lists")}
     end
   end
 

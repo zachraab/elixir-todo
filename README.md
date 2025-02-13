@@ -13,13 +13,17 @@ Developed a web application that allows users to create and manage personalized 
 
 ## Features
 
-  * Create/delete to-do lists
-  * Update existing to-do lists
+  * Create, delete, and update to-do lists
   * Search bar
   * User and email authentication
   * Lists are private if created with an account
 
 ## Future Features
 
+  * Delete entire list from within /lists/#{id}
   * Mark item complete
+  * Toggle between complete and incomplete items
+  * Pin items to favorites
+  * Re-arranging order of items
   * Sharing private lists with other users
+  * Set-up swoosh mailing

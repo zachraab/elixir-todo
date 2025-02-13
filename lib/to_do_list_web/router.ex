@@ -21,7 +21,8 @@ defmodule ToDoListWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
-    live "/new-list", ListLive, :lists
+    live "/new-list", NewListLive, :lists
+    live "/lists", ListsLive
     live "/lists/:id", ListDetailLive
   end
 

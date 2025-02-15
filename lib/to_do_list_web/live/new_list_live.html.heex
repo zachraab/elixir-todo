@@ -2,10 +2,12 @@
 	<div class="w-full md:w-1/2 md:border-r-2 md:pr-10">
 		<h2 class="underline">Create a new list using the form:</h2>
 		<.simple_form for={@list_name_form} phx-submit="set_list_name" phx-change="update_list_name">
-			<.input field={@list_name_form[:new_list_name]} value={@list_name_form.params["new_list_name"]} label="List Name" placeholder="Enter list name..."/>
-			<.button>Set List Name</.button>
+			<div class="flex items-end">
+				<.input field={@list_name_form[:new_list_name]} value={@list_name_form.params["new_list_name"]} label="List Name" placeholder="Enter list name..."/>
+				<.button class="mt-2 ml-5">Set</.button>
+			</div>
 		</.simple_form>
-		<.live_component module={ListItemFormComponent} id="list-item-form" new_list_items={@new_list_items}/>
+		<.live_component module={AddItemFormComponent} id="list-item-form" new_list_items={@new_list_items}/>
 	</div>
 
 	<div class="w-full mt-10 md:mt-0 md:ml-10 md:w-1/2">

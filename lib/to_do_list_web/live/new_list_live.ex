@@ -2,7 +2,7 @@ defmodule ToDoListWeb.NewListLive do
   use ToDoListWeb, :live_view
   alias ToDoList.Accounts
   alias ToDoList.Lists
-  alias ToDoListWeb.ListItemFormComponent
+  alias ToDoListWeb.AddItemFormComponent
 
   def mount(_params, session, socket) do
     user_token = Map.get(session, "user_token")
@@ -46,11 +46,11 @@ defmodule ToDoListWeb.NewListLive do
   def handle_event("create_list", _params, socket) do\
     current_user = socket.assigns.current_user
     case Lists.create_list(%{list_name: socket.assigns.new_list_name, items: socket.assigns.new_list_items, user_id: current_user && current_user.id}) do
-      {:ok, _list} ->
+      {:ok, list} ->
 
         {:noreply,
          socket
-         |> put_flash(:info, "List saved successfully!")
+         |> put_flash(:info, "The \"#{list.list_name}\" list was successfully saved!")
          |> assign(new_list_name: "",
                    new_list_items: [],
                    list_name_form: to_form(%{"new_list_name" => ""})

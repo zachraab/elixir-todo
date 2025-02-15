@@ -20,10 +20,12 @@ Developed a web application that allows users to create and manage personalized 
 
 ## Future Features
 
-  * Delete entire list from within /lists/#{id}
   * Mark item complete
   * Toggle between complete and incomplete items
   * Pin items to favorites
   * Re-arranging order of items
   * Sharing private lists with other users
   * Set-up swoosh mailing
+  * Mobile nav
+  * Add links for newly created lists under new-list form
+  * Add tags to lists that users could use for search

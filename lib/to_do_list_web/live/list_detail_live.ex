@@ -3,7 +3,8 @@ defmodule ToDoListWeb.ListDetailLive do
 
   alias ToDoList.Accounts
   alias ToDoList.Lists
-  alias ToDoListWeb.ListItemFormComponent
+  alias ToDoListWeb.AddItemFormComponent
+  alias ToDoListWeb.DeleteListComponent
 
   def mount(%{"id" => id}, session, socket) do
     user_token = Map.get(session, "user_token")
@@ -37,10 +38,10 @@ defmodule ToDoListWeb.ListDetailLive do
     |> Enum.map(&String.trim/1)
     case Lists.update_list(list, %{items: items_list}) do
       {:ok, updated_list} ->
-        {:noreply, socket |> put_flash(:info, "List: #{list.list_name} was successfully updated") |> assign(list: updated_list)}
+        {:noreply, socket |> put_flash(:info, "The \"#{list.list_name}\" list was successfully updated.") |> assign(list: updated_list)}
 
       {:error, _changeset} ->
-        {:noreply, put_flash(socket, :error, "Failed to save changes to #{list.list_name} list")}
+        {:noreply, put_flash(socket, :error, "Failed to save changes to the \"#{list.list_name}\" list.")}
     end
   end
 
@@ -51,6 +52,10 @@ defmodule ToDoListWeb.ListDetailLive do
     new_index = length(current_items) |> Integer.to_string()
     new_items_map = Map.put(current_items_map, new_index, item)
     update_list_items(socket, new_items_map)
+  end
+
+  def handle_info({:list_deleted, _updated_lists, deleted_list_name}, socket) do
+    {:noreply, socket |> redirect(to: ~p"/lists") |> put_flash(:info, "The \"#{deleted_list_name}\" list has been successfully deleted.")}
   end
 
   def handle_info({:show_error, message}, socket) do
@@ -71,6 +76,6 @@ defmodule ToDoListWeb.ListDetailLive do
 
 	update_list_items(socket, updated_items_map)
 
-	{:noreply, socket |> put_flash(:info, "Successfully deleted item: #{remove_item}") |> assign(list: %{list | items: updated_items})}
+	{:noreply, socket |> put_flash(:info, "Successfully deleted item: \"#{remove_item}\"") |> assign(list: %{list | items: updated_items})}
   end
 end

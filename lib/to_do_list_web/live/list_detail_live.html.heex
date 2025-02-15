@@ -1,6 +1,8 @@
 <%= if @list.user_id == nil || (@current_user && @current_user.id == @list.user_id) do %>
-	<h1 class="text-4xl">Edit and update your list: <strong><%= @list.list_name %></strong></h1>
-
+	<div class="flex flex-col items-center text-center">
+		<h1 class="text-4xl mb-5">Edit and update your list: <strong><%= @list.list_name %></strong></h1>
+		<.live_component module={DeleteListComponent} button_text="Delete List" list_id={@list.id} id={"delete-list-#{@list.id}"} />
+	</div>
 	<div class="flex flex-col md:flex-row mt-10">
 		<div class="w-full md:w-1/2 md:pr-10 md:border-r-2">
 			<strong class="block mt-10 text-2xl"><%= @list.list_name %></strong>
@@ -11,7 +13,7 @@
 						<li class="list-decimal">
 							<div class="flex">
 								<input type="text" name={"items[#{index}]"} value={item} class="mt-2 w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6 border-zinc-300 focus:border-zinc-400"/>
-								<.button type="button" phx-click="delete_item" phx-value-index={index} class="mt-2 ml-5 h-10">X</.button>
+								<.button type="button" phx-click="delete_item" phx-value-index={index} class="mt-2 ml-5">X</.button>
 							</div>
 						</li>
 					<% end %>
@@ -20,7 +22,7 @@
 			</.simple_form>
 		</div>
 		<div class="w-full md:w-1/2 pl-5 md:pl-10">
-			<.live_component module={ListItemFormComponent} id="list-item-form" />
+			<.live_component module={AddItemFormComponent} id="list-item-form" />
 		</div>
 	</div>
 <% else %>

@@ -1,4 +1,4 @@
-defmodule ToDoListWeb.ListItemFormComponent do
+defmodule ToDoListWeb.AddItemFormComponent do
   use ToDoListWeb, :live_component
 
   def update(assigns, socket) do
@@ -11,8 +11,10 @@ defmodule ToDoListWeb.ListItemFormComponent do
     ~H"""
     <div class={@class}>
       <.simple_form for={@list_item_form} phx-submit="add_item" phx-change="update_item" phx-target={@myself}>
-        <.input field={@list_item_form[:added_item]} value={@list_item_form.params["added_item"]} label="Item" placeholder="Add new item..."/>
-        <.button>Add Item</.button>
+        <div class="flex items-end">
+          <.input field={@list_item_form[:added_item]} value={@list_item_form.params["added_item"]} label="Item" placeholder="Add new item..."/>
+          <.button class="mt-2 ml-5">Add</.button>
+        </div>
       </.simple_form>
     </div>
     """
